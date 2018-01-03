@@ -18,6 +18,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor grayColor];
+    
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = width * (250.0 / 375.0);
     CGFloat y = ([UIScreen mainScreen].bounds.size.height - height) * 0.5;
