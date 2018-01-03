@@ -80,7 +80,8 @@ self.placeholderSV = placeholderSV;
 ---
 
 现在能实现基本的翻页效果了，但是，此时所有的点击事件都被占位scrollView拦截了，怎么让cell的点击传给collectionView呢？
-####在占位scrollView添加手势传递事件
+
+#### 在占位scrollView添加手势传递事件
 ```ruby
   // 1.添加一个tap手势
 [placeholderSV addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)]];
