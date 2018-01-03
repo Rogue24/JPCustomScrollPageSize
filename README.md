@@ -2,7 +2,6 @@
 
 自定义page的翻页范围
 
---
 
 ![image](https://github.com/Rogue24/JPCustomScrollPageSize/raw/master/Cover/UuLZJX3xlJ.gif)
 
@@ -77,7 +76,8 @@ self.placeholderSV = placeholderSV;
     return MaxItemCount;
 }
 ```
---
+
+---
 
 现在能实现基本的翻页效果了，但是，此时所有的点击事件都被占位scrollView拦截了，怎么让cell的点击传给collectionView呢？
 
