@@ -21,7 +21,7 @@
 
 1.创建collectionView并实现的基本数据源、代理的方法，这里我的collectionView的数据源和代理都为collectionView自身（self），方便管理。
 
-```ruby
+```obj
 self.delegate = self;
 self.dataSource = self;
 self.scrollEnabled = NO; // 不需要自身来进行滚动
@@ -29,7 +29,7 @@ self.scrollEnabled = NO; // 不需要自身来进行滚动
 
 2.在collectionView上添加一个占位的scrollView（专门用来翻页用的）。
 
-```ruby
+```obj
 // 先从collectionViewLayout中获取翻一页的宽度
 // 【我这里的一页宽度就是一个cell的宽度加上间距】
 JPFlowLayout *flowLayout = (JPFlowLayout *)layout;
@@ -49,7 +49,7 @@ self.placeholderSV = placeholderSV;
 	
 3.修改hitTest方法，让占位scrollView以外的点击事件都能接收到。
 
-```ruby
+```obj
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     return self.placeholderSV;
 }
@@ -57,7 +57,7 @@ self.placeholderSV = placeholderSV;
 
 4.实现scrollViewDidScroll方法。
 
-```ruby
+```obj
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == self.placeholderSV) {
         // 让占位scrollView来控制collectionView的偏移量
@@ -68,7 +68,7 @@ self.placeholderSV = placeholderSV;
 
 5.设置占位scrollView的contentSize（总页数的宽度）。
 
-```ruby
+```obj
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     // 我选择在collectionView的数据源方法中设置contentSize
     // 保证跟collectionView的contentSize保持一致
@@ -82,7 +82,7 @@ self.placeholderSV = placeholderSV;
 现在能实现基本的翻页效果了，但是，此时所有的点击事件都被占位scrollView拦截了，怎么让cell的点击传给collectionView呢？
 
 #### 在占位scrollView添加手势传递事件
-```ruby
+```obj
   // 1.添加一个tap手势
 [placeholderSV addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)]];
 
