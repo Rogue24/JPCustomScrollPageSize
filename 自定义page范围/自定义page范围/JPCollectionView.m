@@ -58,6 +58,10 @@ static NSInteger const MaxItemCount = 10;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    UIView *view = [super hitTest:point withEvent:event];
+    if (view.tag == JPInteractionEnabledTag) {
+        return view;
+    }
     return self.placeholderSV;
 }
 
@@ -65,7 +69,7 @@ static NSInteger const MaxItemCount = 10;
     CGPoint point = [tapGR locationInView:self];
     NSIndexPath *indexPath = [self indexPathForItemAtPoint:point];
     if (indexPath) {
-        [self collectionView:self didSelectItemAtIndexPath:[self indexPathForItemAtPoint:point]];
+        [self collectionView:self didSelectItemAtIndexPath:indexPath];
     }
 }
 
@@ -78,7 +82,7 @@ static NSInteger const MaxItemCount = 10;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     JPCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:JPCellID forIndexPath:indexPath];
-    cell.label.text = [NSString stringWithFormat:@"%zd", indexPath.item];
+    [cell.button setTitle:[NSString stringWithFormat:@"%zd", indexPath.item] forState:UIControlStateNormal];
     return cell;
 }
 

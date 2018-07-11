@@ -13,19 +13,32 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor redColor];
-        UILabel *label = [[UILabel alloc] init];
-        label.font = [UIFont systemFontOfSize:30];
-        label.textAlignment = NSTextAlignmentCenter;
-        label.textColor = [UIColor whiteColor];
-        [self.contentView addSubview:label];
-        self.label = label;
+        UIButton *button = ({
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+            btn.tag = JPInteractionEnabledTag;
+            btn.backgroundColor = [UIColor greenColor];
+            btn.titleLabel.font = [UIFont systemFontOfSize:30];
+            [btn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+            [btn addTarget:self action:@selector(btnDidClick) forControlEvents:UIControlEventTouchUpInside];
+            btn;
+        });
+        [self.contentView addSubview:button];
+        self.button = button;
     }
     return self;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.label.frame = self.contentView.bounds;
+    CGFloat w = self.bounds.size.width * 0.5;
+    CGFloat h = self.bounds.size.height * 0.5;
+    CGFloat x = w * 0.5;
+    CGFloat y = h * 0.5;
+    self.button.frame = CGRectMake(x, y, w, h);
+}
+
+- (void)btnDidClick {
+    NSLog(@"%@", [NSString stringWithFormat:@"我是第%@个", [self.button titleForState:UIControlStateNormal]]);
 }
 
 @end

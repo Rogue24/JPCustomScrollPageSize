@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+static NSInteger const JPInteractionEnabledTag = 10086;
+
 @interface JPCell : UICollectionViewCell
-@property (weak, nonatomic) UILabel *label;
+@property (weak, nonatomic) UIButton *button;
 @end
