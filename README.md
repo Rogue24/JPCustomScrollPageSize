@@ -19,7 +19,7 @@
 
 ## 一个简单粗暴的方法：使用一个占位的scrollView来实现！
 
-- 1.创建collectionView并实现的基本数据源、代理的方法，这里我的collectionView的数据源和代理都为collectionView自身（self），方便管理。
+1.创建collectionView并实现的基本数据源、代理的方法，这里我的collectionView的数据源和代理都为collectionView自身（self），方便管理。
 
 ```obj
 self.delegate = self;
@@ -27,7 +27,7 @@ self.dataSource = self;
 self.scrollEnabled = NO; // 不需要自身来进行滚动
 ```
 
-- 2.在collectionView上添加一个占位的scrollView（专门用来翻页用的）。
+2.在collectionView上添加一个占位的scrollView（专门用来翻页用的）。
 
 ```obj
 // 先从collectionViewLayout中获取翻一页的宽度
@@ -47,7 +47,7 @@ placeholderSV.showsHorizontalScrollIndicator = NO;
 self.placeholderSV = placeholderSV;
 ```
 	
-- 3.修改hitTest方法，让占位scrollView以外的点击事件都能接收到。
+3.修改hitTest方法，让占位scrollView以外的点击事件都能接收到。
 
 ```obj
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
@@ -55,7 +55,7 @@ self.placeholderSV = placeholderSV;
 }
 ```
 
-- 4.实现scrollViewDidScroll方法。
+4.实现scrollViewDidScroll方法。
 
 ```obj
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -66,7 +66,7 @@ self.placeholderSV = placeholderSV;
 }
 ```
 
-- 5.设置占位scrollView的contentSize（总页数的宽度）。
+5.设置占位scrollView的contentSize（总页数的宽度）。
 
 ```obj
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
