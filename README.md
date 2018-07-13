@@ -102,6 +102,34 @@ self.placeholderSV = placeholderSV;
 }
 ```
 
+####防止拦截collectionViewCell上的需要响应的子控件（例如button）
+只要在hitTest方法上判断触碰的view是否为需要响应的子控件，是则返回该控件，否则还是返回占位scrollView，判断条件可以使用tag值，也可以判断view的类型等等。
+- 在cell上添加一个button
+```obj
+// 这里我使用设定好的可以响应的tag值
+UIButton *button = ({
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+    // 设置可以响应的tag值
+    btn.tag = JPInteractionEnabledTag;
+    btn.backgroundColor = [UIColor greenColor];
+    btn.titleLabel.font = [UIFont systemFontOfSize:30];
+    [btn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(btnDidClick) forControlEvents:UIControlEventTouchUpInside];
+    btn;
+});
+```
+- 在hitTest方法里面进行判断
+```obj
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    UIView *view = [super hitTest:point withEvent:event];
+    // 如果该view的tag为可以响应的tag值就返回该控件
+    if (view.tag == JPInteractionEnabledTag) {
+        return view;
+    }
+    return self.placeholderSV;
+}
+```
+
 ## 结语
 此时基本效果能实现了，然而弊端还是有的，因为占位scrollView拦截了collectionView的所有点击事件，而我这里只处理了单击事件，例如collectionView的cell拖动，那么就要把占位scrollView的拦截关掉。
 如果有更好的实现方案请告诉我！
