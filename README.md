@@ -102,7 +102,7 @@ self.placeholderSV = placeholderSV;
 }
 ```
 
-####防止拦截collectionViewCell上的需要响应的子控件（例如button）
+#### 防止拦截collectionViewCell上的需要响应的子控件（例如button）
 只要在hitTest方法上判断触碰的view是否为需要响应的子控件，是则返回该控件，否则还是返回占位scrollView，判断条件可以使用tag值，也可以判断view的类型等等。
 - 在cell上添加一个button
 ```obj
