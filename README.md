@@ -135,5 +135,5 @@ UIButton *button = ({
 此时基本效果能实现了，然而弊端还是有的，因为占位scrollView拦截了collectionView的所有点击事件，而我这里只处理了单击事件，例如collectionView的cell拖动，那么就要把占位scrollView的拦截关掉。
 如果有更好的实现方案请告诉我！
 
-	邮箱：zhoujianping24@hotmail.com
+	扣扣：184669029
 	博客：https://www.jianshu.com/u/2edfbadd451c
