@@ -11,5 +11,5 @@
 static NSInteger const JPInteractionEnabledTag = 10086;
 
 @interface JPCell : UICollectionViewCell
-@property (weak, nonatomic) UIButton *button;
+@property (weak, nonatomic) UILabel *titleLabel;
 @end

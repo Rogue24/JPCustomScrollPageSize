@@ -44,9 +44,11 @@ static NSInteger const MaxItemCount = 10;
         placeholderSV.pagingEnabled = YES;
         placeholderSV.delegate = self;
         placeholderSV.showsHorizontalScrollIndicator = NO;
-        [placeholderSV addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)]];
+//        placeholderSV.contentSize = CGSizeMake(width * MaxItemCount, 0);
         [self addSubview:placeholderSV];
         self.placeholderSV = placeholderSV;
+        
+        [self addGestureRecognizer:placeholderSV.panGestureRecognizer];
     }
     return self;
 }
@@ -54,22 +56,6 @@ static NSInteger const MaxItemCount = 10;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == self.placeholderSV) {
         self.contentOffset = scrollView.contentOffset;
-    }
-}
-
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    UIView *view = [super hitTest:point withEvent:event];
-    if (view.tag == JPInteractionEnabledTag) {
-        return view;
-    }
-    return self.placeholderSV;
-}
-
-- (void)tap:(UITapGestureRecognizer *)tapGR {
-    CGPoint point = [tapGR locationInView:self];
-    NSIndexPath *indexPath = [self indexPathForItemAtPoint:point];
-    if (indexPath) {
-        [self collectionView:self didSelectItemAtIndexPath:indexPath];
     }
 }
 
@@ -82,7 +68,7 @@ static NSInteger const MaxItemCount = 10;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     JPCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:JPCellID forIndexPath:indexPath];
-    [cell.button setTitle:[NSString stringWithFormat:@"%zd", indexPath.item] forState:UIControlStateNormal];
+    cell.titleLabel.text = [NSString stringWithFormat:@"%zd", indexPath.item];
     return cell;
 }
 

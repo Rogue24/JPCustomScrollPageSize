@@ -47,13 +47,13 @@ placeholderSV.showsHorizontalScrollIndicator = NO;
 self.placeholderSV = placeholderSV;
 ```
 	
-3.修改hitTest方法，让占位scrollView以外的点击事件都能接收到。
+3.将占位scrollView的滚动手势转移到collectionView上。
 
 ```obj
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    return self.placeholderSV;
-}
+[self addGestureRecognizer:placeholderSV.panGestureRecognizer];
 ```
+
+PS：这样会覆盖原有的滚动手势，但不会影响到collectionView原来的其他手势事件（collectionView无法滚动了，手指拖动的是占位scrollView）。
 
 4.实现scrollViewDidScroll方法。
 
@@ -69,70 +69,20 @@ self.placeholderSV = placeholderSV;
 5.设置占位scrollView的contentSize（总页数的宽度）。
 
 ```obj
+// 翻页宽度 * 数据数量 
+self.placeholderSV.contentSize = CGSizeMake(self.placeholderSV.frame.size.width * MaxItemCount, 0);
+
+// 我选择在collectionView的数据源方法中设置contentSize，保证任何时候都跟collectionView的contentSize保持一致
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    // 我选择在collectionView的数据源方法中设置contentSize
-    // 保证跟collectionView的contentSize保持一致
-    self.placeholderSV.contentSize = CGSizeMake(self.placeholderSV.jp_width * MaxItemCount, 0); // 翻页宽度 * 数据数量 
+    self.placeholderSV.contentSize = CGSizeMake(self.placeholderSV.frame.size.width * MaxItemCount, 0); 
     return MaxItemCount;
 }
 ```
 
 ---
 
-现在能实现基本的翻页效果了，但是，此时所有的点击事件都被占位scrollView拦截了，怎么让cell的点击传给collectionView呢？
-
-#### 在占位scrollView添加手势传递事件
-- 例如添加一个tap手势
-```obj
-// 添加一个tap手势
-[placeholderSV addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)]];
-
-// 监听tap手势
-- (void)tap:(UITapGestureRecognizer *)tapGR {
-    CGPoint point = [tapGR locationInView:self];
-    NSIndexPath *indexPath = [self indexPathForItemAtPoint:point];
-    if (indexPath) {
-        [self collectionView:self didSelectItemAtIndexPath:indexPath];
-    }
-}
-
-#pragma mark - UICollectionViewDataSource
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    // 使用占位scrollView滚动目标位置（这里我是滚到屏幕中心）
-    [self.placeholderSV setContentOffset:CGPointMake(indexPath.item * self.placeholderSV.jp_width, 0) animated:YES];
-}
-```
-
-#### 防止拦截collectionViewCell上的需要响应的子控件（例如button）
-只要在hitTest方法上判断触碰的view是否为需要响应的子控件，是则返回该控件，否则还是返回占位scrollView，判断条件可以使用tag值，也可以判断view的类型等等。
-- 在cell上添加一个button
-```obj
-// 这里我使用设定好的可以响应的tag值
-UIButton *button = ({
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-    // 设置可以响应的tag值
-    btn.tag = JPInteractionEnabledTag;
-    btn.backgroundColor = [UIColor greenColor];
-    btn.titleLabel.font = [UIFont systemFontOfSize:30];
-    [btn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [btn addTarget:self action:@selector(btnDidClick) forControlEvents:UIControlEventTouchUpInside];
-    btn;
-});
-```
-- 在hitTest方法里面进行判断
-```obj
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    UIView *view = [super hitTest:point withEvent:event];
-    // 如果该view的tag为可以响应的tag值就返回该控件
-    if (view.tag == JPInteractionEnabledTag) {
-        return view;
-    }
-    return self.placeholderSV;
-}
-```
-
 ## 结语
-此时基本效果能实现了，然而弊端还是有的，因为占位scrollView拦截了collectionView的所有点击事件，而我这里只处理了单击事件，例如collectionView的cell拖动，那么就要把占位scrollView的拦截关掉。
+此时基本效果能实现了，然而弊端还是有的，因为占位scrollView覆盖了collectionView的滚动手势，所有collectionView滚动相关的操作都得交由占位scrollView去处理，例如通过自定义动画修改偏移量可能就有额外的处理。
 如果有更好的实现方案请告诉我！
 
 	扣扣：184669029
