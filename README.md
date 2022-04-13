@@ -19,7 +19,7 @@
 
 ## 一个简单粗暴的方法：使用一个占位的scrollView来实现！
 
-1. 创建`collectionView`并实现的基本数据源、代理的方法。
+### 1.创建`collectionView`并实现的基本数据源、代理的方法。
 
 这里我的`collectionView`的数据源和代理都为`collectionView自身（self）`，方便管理。
 
@@ -29,7 +29,7 @@ self.dataSource = self;
 self.scrollEnabled = NO; // 不需要自身来进行滚动
 ```
 
-2. 在`collectionView`上添加一个`占位的scrollView`（专门用来翻页用的）。
+### 2.在`collectionView`上添加一个`占位的scrollView`（专门用来翻页用的）。
 
 ```obj
 // 先从collectionViewLayout中获取翻一页的宽度
@@ -49,7 +49,7 @@ placeholderSV.showsHorizontalScrollIndicator = NO;
 self.placeholderSV = placeholderSV;
 ```
 	
-3. 将`占位scrollView`的滚动手势【转移】到`collectionView`上。
+### 3.将`占位scrollView`的滚动手势【转移】到`collectionView`上。
 
 ```obj
 [self addGestureRecognizer:placeholderSV.panGestureRecognizer];
@@ -57,7 +57,7 @@ self.placeholderSV = placeholderSV;
 
 PS：这样会覆盖原有的滚动手势，但不会影响到`collectionView`原来的其他手势事件（`collectionView`无法滚动了，手指拖动的是`占位scrollView`）。
 
-4. 实现`scrollViewDidScroll`方法。
+### 4.实现`scrollViewDidScroll`方法。
 
 ```obj
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -68,7 +68,7 @@ PS：这样会覆盖原有的滚动手势，但不会影响到`collectionView`�
 }
 ```
 
-5. 设置`占位scrollView`的`contentSize`（总页数的宽度）。
+### 5.设置`占位scrollView`的`contentSize`（总页数的宽度）。
 
 ```obj
 // 翻页宽度 * 数据数量 
