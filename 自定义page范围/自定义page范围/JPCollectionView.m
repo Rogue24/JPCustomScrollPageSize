@@ -78,6 +78,4 @@ static NSInteger const MaxItemCount = 10;
     [self.placeholderSV setContentOffset:CGPointMake(indexPath.item * self.placeholderSV.jp_width, 0) animated:YES];
 }
 
-
-
 @end
